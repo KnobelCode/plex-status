@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Is Plex Server Up?</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 100px; background: #111; color: #eee; }
+    #status { font-size: 2em; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>🎬 Plex Server Status</h1>
+  <div id="status">Checking...</div>
+
+  <script>
+    async function checkStatus() {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+
+        const response = await fetch("https://audiobookshelf.0xcafe5.com", {
+          mode: "no-cors",
+          signal: controller.signal
+        });
+
+        clearTimeout(timeout);
+        document.getElementById("status").innerText = "🟢 Online";
+      } catch (error) {
+        document.getElementById("status").innerText = "🔴 Offline";
+      }
+    }
+
+    checkStatus();
+    setInterval(checkStatus, 15000); // Check every 15 seconds
+  </script>
+</body>
+</html>
